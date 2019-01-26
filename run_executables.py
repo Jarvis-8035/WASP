@@ -4,11 +4,30 @@ from glob import glob
 import time
 import win32gui
 import speech_recognition as sr
+import wave
+import pyaudio
+
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 r = sr.Recognizer()
 r.energy_threshold=2500
 r.operation_timeout = 2
+
+def play_sound(music_name):
+    chunk = 1024  
+    f = wave.open(r"{}".format(music_name),"rb")  
+    p = pyaudio.PyAudio()  
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                    channels = f.getnchannels(),  
+                    rate = f.getframerate(),  
+                    output = True)  
+    data = f.readframes(chunk)  
+    while data:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
+    stream.stop_stream()  
+    stream.close()  
+    p.terminate() 
 
 def listenn():
     while True:
@@ -20,7 +39,8 @@ def listenn():
             strr = strr.lower()
             return strr
         except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
+            play_sound('sorry.wav')
+            #print("Google Speech Recognition could not understand audio")
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
@@ -56,4 +76,5 @@ def run_executable(exec_name):
                 subprocess.Popen(st, startupinfo=si,shell=True).wait()
                 break
     else:
-        print('No such application found')
+        play_sound('no_app.wav')
+        #print('No such application found')
