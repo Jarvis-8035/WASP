@@ -3,6 +3,9 @@ import os
 import subprocess
 from pynput.keyboard import Key, Controller
 import time
+import ctypes
+import struct
+import random
 
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -65,3 +68,21 @@ def shutdown():
 
 def restart():
     subprocess.Popen("shutdown /r", startupinfo=si, shell=True).wait()
+
+def is_64_windows():
+    return struct.calcsize('P') * 8 == 64
+
+def get_sys_parameters_info():
+    return ctypes.windll.user32.SystemParametersInfoW if is_64_windows() \
+        else ctypes.windll.user32.SystemParametersInfoA
+        
+def change_wallpaper(path):
+    SPI_SETDESKWALLPAPER = 20
+    li = []
+    li = os.listdir(path)
+    sys_parameters_info = get_sys_parameters_info()
+    sz = len(li)
+    index = random.randint(0, sz - 1)
+    r = sys_parameters_info(SPI_SETDESKWALLPAPER, 0, path + "\\"+li[index], 3)
+    if not r:
+        print(ctypes.WinError())
