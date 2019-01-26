@@ -5,6 +5,8 @@ import random
 import time
 import speech_recognition as sr
 from pynput.keyboard import Key,Controller
+import wave
+import pyaudio
 
 keyboard = Controller()
 r = sr.Recognizer()
@@ -12,6 +14,24 @@ r.energy_threshold=2500
 r.operation_timeout = 2
 num_list = ['one','two','to','too','three','four','five','1','2','3','4','5']
 num_dic = {'one':1,'two':2,'three':3,'four':4,'five':5,'to':2,'too':2}
+
+
+def play_sound(music_name):
+    chunk = 1024  
+    f = wave.open(r"{}".format(music_name),"rb")  
+    p = pyaudio.PyAudio()  
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                    channels = f.getnchannels(),  
+                    rate = f.getframerate(),  
+                    output = True)  
+    data = f.readframes(chunk)  
+    while data:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
+    stream.stop_stream()  
+    stream.close()  
+    p.terminate() 
+
 
 def back_click():
     keyboard.press(Key.alt)
@@ -22,7 +42,7 @@ def back_click():
 def listenn():
     while True:
         with sr.Microphone() as source :
-            print("Say something!")
+            #print("Say something!")
             audio = r.listen( source )
         try:
             strr = r.recognize_google(audio)
@@ -35,7 +55,8 @@ def listenn():
             print(strr)
             return strr
         except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
+            play_sound('sorry.wav')
+            #print("Google Speech Recognition could not understand audio")
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
