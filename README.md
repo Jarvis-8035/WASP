@@ -1,3 +1,8 @@
+<p align="center"> 
+<img src="https://media.giphy.com/media/WxDtfLtRRUZyw/giphy.gif">
+</p>
+
+
 # WASP-Windows Automation Software for People
 WASP is our attempt to automate tasks performed on Microsoft Windows. It would help people not familiar with technology to operate computer systems relatively easily. People alien to this domain face difficulties in getting used to technology, WASP here serves as a handy tool. WASP performs all common tasks like opening applications, opening and closing files and folders, moving, renaming and organizing files, searching for files, compressing and decompressing files, changing system background, switching tabs, accessing utilities like webcam and microphone, shutting down the system etc. It also has additional features like playing music according to mood, reporting errors, etc. It also has an easter egg :p. This is what to hope to achieve in 36 hrs, may be with extra features to be added later if time permits.  
 
@@ -15,7 +20,6 @@ pyaudio
 speech_recognition
 wave
 BeautifulSoup4
-selenium
 ```
 In case getting some error, install the required module.
 
@@ -50,5 +54,18 @@ To use its functionality we need PyAudio (for microphone users)
 #### 5. wave
 
   Use ```pip install Wave``` to install wave.
+  
+ ## Motivation
+ 
+ 
+ 
+ ## Features 
+ 
+ * 
+ *
+ *
+ *
+ *
+ *
 
 
