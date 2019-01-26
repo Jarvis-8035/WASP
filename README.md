@@ -67,5 +67,14 @@ To use its functionality we need PyAudio (for microphone users)
  *
  *
  *
+ 
+ ## Authors
+ 
+ MNNIT Hackathon - Hack-36 2nd Edition 2k19
+ * **Harsh Mishra** [github](https://github.com/Jarvis-8035)
+ * **Harshit Rawat** [github](https://github.com/harshitr612)
+ * **Ankit Mishra** [github](https://github.com/cef1998)
+ * **Saharsh  Jain** [github](https://github.com/SAHARSH123)
+ 
 
 
