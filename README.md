@@ -68,6 +68,12 @@ To use its functionality we need PyAudio (for microphone users)
  *
  *
  
+ ## Running the tests
+ 
+  ```python3 main.py```
+  
+ Enjoy !!!
+ 
  ## Authors
  
  MNNIT Hackathon - Hack-36 2nd Edition 2k19
