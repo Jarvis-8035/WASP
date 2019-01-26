@@ -3,6 +3,7 @@ import files_folders_open as ffo
 import music
 import utilities
 import google_surf
+import run_executables
 
 r = sr.Recognizer()
 r.energy_threshold=2500
@@ -28,12 +29,13 @@ while True:
         if "open" in li or "Open" in li or "close" in li or "back" in li or "organise" in li:
             ffo.opening(li)
         elif ("play" in li or "Play" in li) and ("music" in li or "Music" in li):
-            print("play kro bhai")
             music.play_music(li[1])
         elif "switch" in li:
             utilities.tabs_switching_operation()
         elif "search" in li and "google" in li:
             google_surf.search()
+        elif "run" in li:
+            run_executables.run_executable(" ".join(li[1:]))
         elif "bye" in li:
             break
     except sr.UnknownValueError:
