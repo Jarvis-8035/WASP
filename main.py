@@ -31,7 +31,7 @@ def play_sound(music_name):
 while True:
     with sr.Microphone() as source :
         print("Say something!")
-        audio = r.listen( source )
+        audio = r.listen( source ,timeout=5)
     
     try:
         str = r.recognize_google(audio)
@@ -60,4 +60,5 @@ while True:
     	play_sound('sorry.wav')
         #print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+        play_sound('sorry.wav')
+#        print("Could not request results from Google Speech Recognition service; {0}".format(e))
