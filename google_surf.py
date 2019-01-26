@@ -4,12 +4,20 @@ import bs4
 import random
 import time
 import speech_recognition as sr
+from pynput.keyboard import Key,Controller
 
+keyboard = Controller()
 r = sr.Recognizer()
 r.energy_threshold=2500
 r.operation_timeout = 2
 num_list = ['one','two','to','too','three','four','five','1','2','3','4','5']
 num_dic = {'one':1,'two':2,'three':3,'four':4,'five':5,'to':2,'too':2}
+
+def back_click():
+    keyboard.press(Key.alt)
+    keyboard.press(Key.left)
+    keyboard.release(Key.left)
+    keyboard.release(Key.alt)
 
 def listenn():
     while True:
@@ -24,6 +32,7 @@ def listenn():
                 if len(sx[2])==1:
                     return int(sx[2])
                 return num_dic[sx[2]]
+            print(strr)
             return strr
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
@@ -33,8 +42,6 @@ def listenn():
 query_url = "https://google.com/search?q="
 
 def search():
-#    def back_click():
-#        browser.find_element_by_css_selector('.sc-button-play.playButton.sc-button.m-stretch').click()
     browser = webdriver.Chrome("E:\chromedriver.exe")
     browser.get("https://google.com")
     st = listenn()
@@ -58,7 +65,17 @@ def search():
         if choice == "close":
             browser.quit()
             break
+        elif choice == "go back":
+            back_click()
+            continue
+        elif choice == "scroll":
+            tm_nw = time.time()
+            while True:
+                tm_tmp = time.time()
+                if tm_tmp-tm_nw>0.01:
+                    break
+                keyboard.press(Key.down)
+            keyboard.release(Key.down)
+            continue
         print("Opening : " + track_names[choice])
         browser.get("http://google.com" + track_links[choice])
-    #    browser.find_element_by_css_selector('.sc-button-play.playButton.sc-button.m-stretch').click()
-#search("how are you")
