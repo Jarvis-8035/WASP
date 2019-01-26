@@ -1,12 +1,31 @@
 import os
 import subprocess
 import organizebytype as oft
+import wave
+import pyaudio
 
 is_open = 0
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 path = os.getcwd()
 par_path = ""
+
+def play_sound(music_name):
+    chunk = 1024  
+    f = wave.open(r"{}".format(music_name),"rb")  
+    p = pyaudio.PyAudio()  
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                    channels = f.getnchannels(),  
+                    rate = f.getframerate(),  
+                    output = True)  
+    data = f.readframes(chunk)  
+    while data:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
+    stream.stop_stream()  
+    stream.close()  
+    p.terminate() 
+
 def open_folder(folder_name):
     try:
         global path,par_path
@@ -16,6 +35,7 @@ def open_folder(folder_name):
         path += folder_name + "\\"
         par_path = os.path.abspath(os.path.join(path,os.pardir))
     except OSError:
+        play_sound('folder_not_exists.wav')
         print('Folder Not Found')
         os.system("start /MAX "+par_path)
 
@@ -37,7 +57,6 @@ def close_this():
     global path,par_path
     pth = path[:len(path)-1]
     st = 'taskkill /FI "WINDOWTITLE eq '+pth+'*"'
-    print(st)
     subprocess.Popen(st, startupinfo=si,shell=True).wait()
     
 def close_current_folder():
@@ -52,7 +71,8 @@ def close_current_folder():
         subprocess.Popen(st, startupinfo=si,shell=True).wait()
         path = par_path
     except OSError:
-        print("File Not Found !!")
+        play_sound('folder_not_exists.wav')
+        print("Folder Not Found !!")
 
 def close_current_file(fileName):
     global path,par_path
@@ -97,6 +117,7 @@ def opening(li):
             if li in nw_li:
                 stri = file_list[nw_li.index(li)]
             else :
+                play_sound('folder_not_exists.wav')
                 break
             open_folder(stri)
             break
@@ -115,6 +136,7 @@ def opening(li):
             if li_n in nw_li:
                 stri = file_list[nw_li.index(li_n)]
             else :
+                play_sound('file_not_exists.wav')
                 break
             open_file(stri)
             fil_name = stri
