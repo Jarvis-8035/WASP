@@ -4,17 +4,35 @@ import bs4
 import random
 import time
 import speech_recognition as sr
+import wave
+import pyaudio
 
 r = sr.Recognizer()
 r.energy_threshold=2000
 r.operation_timeout = 2
 st="next"
 
+def play_sound(music_name):
+    chunk = 1024  
+    f = wave.open(r"{}".format(music_name),"rb")  
+    p = pyaudio.PyAudio()  
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                    channels = f.getnchannels(),  
+                    rate = f.getframerate(),  
+                    output = True)  
+    data = f.readframes(chunk)  
+    while data:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
+    stream.stop_stream()  
+    stream.close()  
+    p.terminate() 
+
 def listenn():
     global st
     while True:
         with sr.Microphone() as source :
-            print("Say something!")
+            #print("Say something!")
             audio = r.listen( source )
         try:
             print(r.recognize_google(audio))
@@ -36,7 +54,8 @@ def listenn():
             else:
                 print("Unrecognised Command !!")
         except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
+            #print("Google Speech Recognition could not understand audio")
+            play_sound('sorry.wav')
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
         except sr.TimeoutError as e:
