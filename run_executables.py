@@ -1,49 +1,59 @@
 import os
-import os
-import os.path
+import subprocess
 from glob import glob
+import time
+import win32gui
+import speech_recognition as sr
+si = subprocess.STARTUPINFO()
+si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+r = sr.Recognizer()
+r.energy_threshold=2500
+r.operation_timeout = 2
+
+def listenn():
+    while True:
+        with sr.Microphone() as source :
+            print("Say something!")
+            audio = r.listen( source )
+        try:
+            strr = r.recognize_google(audio)
+            strr = strr.lower()
+            return strr
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def run_executable(exec_name):
+    exec_name = ''.join(exec_name.split(" "))
+    exec_name += '.lnk'
+    exec_name = exec_name.lower()
 
-	# exec_name is the name of exec received in lower case
-	exec_name = ''.join(exec_name.split(" "))
-	exec_name += '.lnk'
-	exec_name = exec_name.lower()
+    result = [y for x in os.walk("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs") for y in glob(os.path.join(x[0], '*.lnk'))]
 
-	result = [y for x in os.walk("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs") for y in glob(os.path.join(x[0], '*.lnk'))]
-
-	shortcuts=[]
+    shortcuts=[]
 	
-	index = 0
-	for files in result:
-		index = files.rfind('\\') + 1
-		shortcuts.append(files[index:])
+    index = 0
+    for files in result:
+    	index = files.rfind('\\') + 1
+    	shortcuts.append(files[index:])
+    nw_names=[]    
+    for names in shortcuts:
+    	nw_names.append(''.join(names.split(" ")).lower())
 
-	nw_names=[]
-	for names in shortcuts:
-		nw_names.append(''.join(names.split(" ")).lower())
-
-#	for b in nw_names:
-#		print(b)
-
-	if exec_name in nw_names:
-		index = nw_names.index(exec_name)
-		stri = shortcuts[index]
-		os.system("start "+'"" '+'"'+'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\'+stri+'"')
-	else:
-		print('No such application found')
-
-#run_executable('Firefox')
-
-#for nw in nw_names:
-	#print(nw)
-
-#for names in shortcuts:
-#	print(names)
-
-#os.system("start "+'"" '+'"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Notepad++.lnk"')
-
-
-
-
-
+    if exec_name in nw_names:
+        index = nw_names.index(exec_name)
+        stri = shortcuts[index]
+        cm = "start "+'"" '+'"'+'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\'+stri+'"'
+        subprocess.Popen(cm, startupinfo=si,shell=True).wait()
+        time.sleep(2)
+        while True:
+            strr = listenn()
+            if strr=="close":
+                w=win32gui
+                cwn = w.GetWindowText(w.GetForegroundWindow())
+                st = 'taskkill /FI "WINDOWTITLE eq '+cwn+'*"'
+                subprocess.Popen(st, startupinfo=si,shell=True).wait()
+                break
+    else:
+        print('No such application found')
