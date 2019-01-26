@@ -6,9 +6,27 @@ import time
 import ctypes
 import struct
 import random
+import wave
+import pyaudio
 
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+def play_sound(music_name):
+    chunk = 1024  
+    f = wave.open(r"{}".format(music_name),"rb")  
+    p = pyaudio.PyAudio()  
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                    channels = f.getnchannels(),  
+                    rate = f.getframerate(),  
+                    output = True)  
+    data = f.readframes(chunk)  
+    while data:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
+    stream.stop_stream()  
+    stream.close()  
+    p.terminate() 
 
 
 def compress_file(path):
@@ -49,19 +67,22 @@ def search_file(path, file_name):
     if file_name in file_list:
         print("File Exists in: ", path)
     else:
-        print("File not found")
+        play_sound('file_not_exists.wav')
+        #print("File not found")
 
 def rename_file(path, file_name, after_rename):
     file_list = os.listdir(path)
 
     if file_name in file_list:
         if(after_rename == file_name):
-            print('File already exists')
+            play_sound('file_exists.wav')
+            #print('File already exists')
         cur_path = path+'/'+file_name
         renamed_path = path+'/'+after_rename
         os.rename(cur_path, renamed_path)
     else :
-        print("Cannot rename file! File does not exist")
+        play_sound('cannot_rename.wav')
+        #print("Cannot rename file! File does not exist")
 
 def shutdown():
     subprocess.Popen("shutdown /s", startupinfo=si, shell=True).wait()
