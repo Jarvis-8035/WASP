@@ -6,6 +6,7 @@ import google_surf
 import run_executables
 import wave
 import pyaudio
+import Webcam
 
 r = sr.Recognizer()
 r.energy_threshold=2500
@@ -54,6 +55,12 @@ while True:
             google_surf.search()
         elif "run" in li:
             run_executables.run_executable(" ".join(li[1:]))
+        elif "shutdown" in li:
+            utilities.shutdown()
+        elif "restart" in li:
+            utilities.restart()
+        elif "tell" in li and "me" in li and "looking" in li:
+            Webcam.trigger()
         elif "bye" in li:
             break
     except sr.UnknownValueError:
