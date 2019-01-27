@@ -55,18 +55,13 @@ To use its functionality we need PyAudio (for microphone users)
 
   Use ```pip install Wave``` to install wave.
   
- ## Motivation
- 
- 
- 
  ## Features 
  
- * 
- *
- *
- *
- *
- *
+ * Performing Microsoft Windows operations and utilities
+ * Working with file systems, performing all operations on files and folders, etc.
+ * Play music according to mood 
+ * Surfing the web using voice commands
+ * Organizing files and maintaining todo lists 
  
  ## Running the tests
  
@@ -80,7 +75,7 @@ To use its functionality we need PyAudio (for microphone users)
  * **Harsh Mishra** [github](https://github.com/Jarvis-8035)
  * **Harshit Rawat** [github](https://github.com/harshitr612)
  * **Ankit Mishra** [github](https://github.com/cef1998)
- * **Saharsh  Jain** [github](https://github.com/SAHARSH123)
+ * **Saharsh Jain** [github](https://github.com/SAHARSH123)
  
 
 
